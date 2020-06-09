@@ -15,14 +15,19 @@ const userRouter = require('./routes/userRoutes');
 const app = express();
 
 //MIDDLEWARE
-app.use(morgan('dev'));     //for logging information regarding requests
-app.use(express.json());    //for turning the data in request into JSON format
+if (process.env.NODE_ENV === 'development') {
+    app.use(morgan('dev')); //for logging information regarding requests
+}
+app.use(express.json()); //for turning the data in request into JSON format
+app.use(express.static(`${__dirname}/public`));
 
+/*
 app.use((req, res, next) => {
     console.log('Hello from the middleware');
     next();
 });
 //next() is important as fuck to continue the (req,res) to the next middleware
+*/
 
 //this function gives a timestamp property to the incoming request
 app.use((req, res, next) => {

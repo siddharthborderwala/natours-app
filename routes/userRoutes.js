@@ -6,7 +6,7 @@
 const express = require('express');
 
 //PERSONAL MODULES
-const userController = require('./../controllers/userController');
+const userController = require('../controllers/userController');
 
 const userRouter = express.Router();
 

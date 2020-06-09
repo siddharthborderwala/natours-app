@@ -6,7 +6,7 @@
 const express = require('express');
 
 //PERSONAL MODULES
-const tourController = require('./../controllers/tourController');
+const tourController = require('../controllers/tourController');
 
 const tourRouter = express.Router();
 
@@ -15,7 +15,7 @@ tourRouter.param('id', tourController.checkId);
 tourRouter
     .route('/')
     .get(tourController.getAllTours)
-    .post(tourController.createTour);
+    .post(tourController.checkBody, tourController.createTour);
 
 tourRouter
     .route('/:id')
