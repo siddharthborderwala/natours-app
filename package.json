@@ -4,7 +4,7 @@
     "description": "Learning Nodejs, Express and MongoDB",
     "main": "server.js",
     "scripts": {
-        "dev": "nodemon server.js --mode development",
+        "start": "nodemon server.js --mode development",
         "prod": "nodemon server.js --mode production"
     },
     "author": "Siddharth Borderwala",
@@ -12,6 +12,7 @@
     "dependencies": {
         "dotenv": "^8.2.0",
         "express": "^4.17.1",
+        "mongoose": "^5.9.18",
         "morgan": "^1.10.0"
     },
     "devDependencies": {
