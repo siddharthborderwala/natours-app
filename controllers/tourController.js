@@ -4,10 +4,25 @@
 
 //CORE MODULES
 const Tour = require('../models/tourModel');
+const APIFeatures = require('../utils/APIFeatures.class');
+
+exports.aliasTop5Cheap = (req, res, next) => {
+    req.query.limit = '5';
+    req.query.sort = '-ratingsAverage,price';
+    req.query.fields = 'name,price,ratingsAverage,summary,difficulty';
+    next();
+};
 
 exports.getAllTours = async (req, res) => {
     try {
-        const tours = await Tour.find();
+        const features = new APIFeatures(Tour.find(), req.query)
+            .filter()
+            .sort()
+            .limitFields()
+            .paginate();
+        const tours = await features.query;
+
+        //send response
         res.status(200).json({
             status: 'success',
             results: tours.length,
@@ -52,7 +67,7 @@ exports.createTour = async (req, res) => {
     } catch (error) {
         res.status(400).json({
             status: 'fail',
-            message: 'Invalid data sent!',
+            message: error,
         });
     }
 };
