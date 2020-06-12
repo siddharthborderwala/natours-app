@@ -107,27 +107,97 @@ exports.deleteTour = async (req, res) => {
     }
 };
 
-/*
-CUSTOM MIDDLEWARES
+//use aggreation piprline in mongo db for data stats
 
-exports.checkId = (req, res, next, val) => {
-    const id = parseInt(req.params.id, 10);
-    if (id < 0 || id > tours.length) {
-        return res.status(404).json({
+exports.getTourStats = async (req, res) => {
+    try {
+        const stats = await Tour.aggregate([
+            {
+                $match: {
+                    ratingsAverage: { $gte: 4.5 },
+                },
+            },
+            {
+                $group: {
+                    _id: { $toUpper: '$difficulty' },
+                    numTours: { $sum: 1 },
+                    numRatings: { $sum: '$ratingsQuantity' },
+                    avgRating: { $avg: '$ratingsAverage' },
+                    avgPrice: { $avg: '$price' },
+                    minPrice: { $min: '$price' },
+                    maxPrice: { $max: '$price' },
+                },
+            },
+            {
+                $sort: {
+                    avgPrice: 1, //ascending
+                },
+            },
+            {
+                $match: {
+                    _id: { $ne: 'EASY' },
+                },
+            },
+        ]);
+        res.status(200).json({
+            status: 'success',
+            data: { stats },
+        });
+    } catch (error) {
+        res.status(404).json({
             status: 'fail',
-            message: 'Invalid ID',
+            message: error,
         });
     }
-    next();
 };
 
-exports.checkBody = (req, res, next) => {
-    if (!(req.body.name || req.body.price)) {
-        res.status(400).json({
+exports.getMonthlyPlan = async (req, res) => {
+    try {
+        const year = req.params.year * 1;
+        const plan = await Tour.aggregate([
+            {
+                $unwind: '$startDates',
+            },
+            {
+                $match: {
+                    startDates: {
+                        $gte: new Date(year, 1, 1),
+                        $lte: new Date(year, 12, 31),
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: { $month: '$startDates' },
+                    numTours: { $sum: 1 },
+                    tours: { $push: '$name' },
+                },
+            },
+            {
+                $addFields: { month: '$_id' },
+            },
+            {
+                $project: {
+                    _id: 0,
+                },
+            },
+            {
+                $sort: {
+                    numTours: -1,
+                },
+            },
+            {
+                $limit: 12,
+            },
+        ]);
+        res.status(200).json({
+            status: 'success',
+            data: { plan },
+        });
+    } catch (error) {
+        res.status(404).json({
             status: 'fail',
-            message: 'Creating a tour requires a name and a price for the tour',
+            message: error,
         });
     }
-    next();
 };
-*/
