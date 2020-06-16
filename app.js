@@ -1,35 +1,24 @@
-//
-//  EVERYTHING EXPRESS APP RELATED
-//
-
-//THIRD PARTY MODULES
 const express = require('express');
 const morgan = require('morgan');
 
-//PERSONAL MODULES
 //routers
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+
+//handlers
+const AppError = require('./utils/AppError.class');
+const globalErrorHanlder = require('./controllers/errorController');
 
 //APP - INSTANCE OF EXPRESS
 const app = express();
 
 //MIDDLEWARE
 if (process.env.NODE_ENV === 'development') {
-    app.use(morgan('dev')); //for logging information regarding requests
+    app.use(morgan('dev'));
 }
-app.use(express.json()); //for turning the data in request into JSON format
+app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 
-/*
-app.use((req, res, next) => {
-    console.log('Hello from the middleware');
-    next();
-});
-//next() is important as fuck to continue the (req,res) to the next middleware
-*/
-
-//this function gives a timestamp property to the incoming request
 app.use((req, res, next) => {
     req.reqTime = new Date().toUTCString();
     next();
@@ -38,5 +27,11 @@ app.use((req, res, next) => {
 //MOUNTING ROUTERS AS MIDDLEWARES
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+
+app.all('*', (req, res, next) => {
+    next(new AppError(`Cannot find ${req.originalUrl} 😶`));
+});
+
+app.use(globalErrorHanlder);
 
 module.exports = app;

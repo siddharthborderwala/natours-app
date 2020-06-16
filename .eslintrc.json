@@ -13,6 +13,7 @@
         "no-return-await": "off",
         "no-underscore-dangle": "off",
         "no-useless-path-segments": "off",
+        "no-useless-escape": "warn",
         "class-methods-use-this": "off",
         "prefer-destructuring": ["error", { "object": true, "array": false }],
         "no-unused-vars": ["warn", { "argsIgnorePattern": "req|res|next|val" }],

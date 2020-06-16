@@ -4,8 +4,8 @@
     "description": "Learning Nodejs, Express and MongoDB",
     "main": "server.js",
     "scripts": {
-        "start": "nodemon server.js --mode development",
-        "prod": "nodemon server.js --mode production",
+        "start": "nodemon server.js NODE_ENV=development",
+        "prod": "nodemon server.js NODE_ENV=production",
         "debug": "ndb server.js"
     },
     "author": "Siddharth Borderwala",

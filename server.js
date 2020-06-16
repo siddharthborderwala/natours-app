@@ -4,7 +4,21 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
+process.on('uncaughtException', error => {
+    console.log(
+        'UNCAUGHT EXCEPTION:',
+        error.name,
+        error.message,
+        '\nGracefully shutting down...'
+    );
+    process.exit(1);
+});
+
 dotenv.config({ path: './config.env' });
+
+process.env.NODE_ENV = process.argv[2].slice(9);
+
+console.log('Process environment NODE_ENV:', process.env.NODE_ENV);
 
 const app = require('./app');
 
@@ -21,10 +35,22 @@ mongoose
         useUnifiedTopology: true,
     })
     .then(() => console.log('DB Connection was Successfull'))
-    .catch(error => console.log(error));
+    .catch(error => console.error('ERROR:', error));
 
 //LISTEN ON PORT 3000
 const port = process.env.PORT || 3000;
-app.listen(port, () => {
+const server = app.listen(port, () => {
     console.log(`App running on port ${port}...`);
+});
+
+process.on('unhandledRejection', error => {
+    console.log(
+        'UNHANDLED REJECTION:',
+        error.name,
+        error.message,
+        '\nGracefully shutting down...'
+    );
+    server.close(() => {
+        process.exit(1);
+    });
 });
