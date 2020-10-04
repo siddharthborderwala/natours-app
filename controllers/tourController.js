@@ -83,7 +83,7 @@ exports.deleteTour = catchAsync(async (req, res, next) => {
     });
 });
 
-//use aggreation piprline in mongo db for data stats
+//use aggregation pipeline in mongo db for data stats
 exports.getTourStats = catchAsync(async (req, res) => {
     const stats = await Tour.aggregate([
         {

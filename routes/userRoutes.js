@@ -7,8 +7,12 @@ const express = require('express');
 
 //PERSONAL MODULES
 const userController = require('../controllers/userController');
+const authController = require('../controllers/authController');
 
 const userRouter = express.Router();
+
+userRouter.post('/signup', authController.signup);
+userRouter.post('/login', authController.login);
 
 userRouter
     .route('/')

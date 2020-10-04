@@ -34,7 +34,7 @@ mongoose
         useFindAndModify: false,
         useUnifiedTopology: true,
     })
-    .then(() => console.log('DB Connection was Successfull'))
+    .then(() => console.log('DB Connection was Successful'))
     .catch(error => console.error('ERROR:', error));
 
 //LISTEN ON PORT 3000

@@ -7,7 +7,7 @@ const userRouter = require('./routes/userRoutes');
 
 //handlers
 const AppError = require('./utils/AppError.class');
-const globalErrorHanlder = require('./controllers/errorController');
+const globalErrorHandler = require('./controllers/errorController');
 
 //APP - INSTANCE OF EXPRESS
 const app = express();
@@ -24,7 +24,7 @@ app.use((req, res, next) => {
     next();
 });
 
-//MOUNTING ROUTERS AS MIDDLEWARES
+//MOUNTING ROUTERS AS MIDDLEWARE
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 
@@ -32,6 +32,6 @@ app.all('*', (req, res, next) => {
     next(new AppError(`Cannot find ${req.originalUrl} 😶`));
 });
 
-app.use(globalErrorHanlder);
+app.use(globalErrorHandler);
 
 module.exports = app;
