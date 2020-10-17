@@ -14,38 +14,22 @@ const signToken = id => {
   });
 };
 
-exports.signup = catchAsync(async (req, res, next) => {
-  const {
-    name,
-    email,
-    password,
-    passwordConfirm,
-    photo = undefined,
-    role = 'user',
-  } = req.body;
-  const newUser = await User.create({
-    name,
-    email,
-    password,
-    passwordConfirm,
-    photo,
-    role,
-  });
+const createAndSendToken = (user, statusCode, res) => {
+  const token = signToken(user._id);
 
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
+  res.status(statusCode).json({
     status: 'success',
     token,
     data: {
-      user: {
-        name: newUser.name,
-        email: newUser.email,
-        photo: newUser.photo,
-        role: newUser.role,
-      },
+      user: user,
     },
   });
+};
+
+exports.signup = catchAsync(async (req, res, next) => {
+  const newUser = await User.create(req.body);
+
+  createAndSendToken(newUser, 201, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -64,11 +48,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
   //send token to client
-  const token = signToken(user._id);
-  res.status(200).json({
-    status: 'success',
-    token,
-  });
+  createAndSendToken(user, 200, res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -172,8 +152,24 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.save();
 
   // 4) Log the user in and send jwt
-  res.status(200).json({
-    status: 'success',
-    token: signToken(user.id),
-  });
+  createAndSendToken(user, 200, res);
+});
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+  // 1) Get user from collection
+  const user = await User.findById(req.user.id).select('+password');
+
+  // 2) Check if posted password is correct
+  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+    return next(new AppError('Your current password is wrong', 401));
+  }
+
+  // 3) If so, update the password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // We don't use update method for the mongoose hooks to work
+
+  // 4) Log the user in, i.e. send fresh JWT
+  createAndSendToken(user, 200, res);
 });

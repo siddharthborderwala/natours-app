@@ -11,10 +11,10 @@ const handleDuplicateFieldsDB = err => {
 };
 
 const handleValidationErrorDB = err => {
-  const errmsg = Object.values(err.errors)
+  const errorMessage = Object.values(err.errors)
     .map(error => error.message)
     .join('.\n ');
-  const message = `Invalid input data. ${errmsg}`;
+  const message = `Invalid input data. ${errorMessage}`;
   return new AppError(message, 400);
 };
 
