@@ -3,42 +3,36 @@
 //
 
 //THIRD PARTY MODULES
-const express = require('express');
+const router = require('express').Router();
 
 //PERSONAL MODULES
 const userController = require('../controllers/userController');
 const authController = require('../controllers/authController');
 
-const userRouter = express.Router();
+router.post('/signup', authController.signup);
+router.post('/login', authController.login);
 
-userRouter.post('/signup', authController.signup);
-userRouter.post('/login', authController.login);
+router.post('/forgot-password', authController.forgotPassword);
+router.patch('/reset-password/:token', authController.resetPassword);
 
-userRouter.post('/forgot-password', authController.forgotPassword);
-userRouter.patch('/reset-password/:token', authController.resetPassword);
-
-userRouter.patch(
+router.patch(
   '/update-my-password',
   authController.protect,
   authController.updatePassword
 );
 
-userRouter.patch('/update-me', authController.protect, userController.updateMe);
-userRouter.delete(
-  '/delete-me',
-  authController.protect,
-  userController.deleteMe
-);
+router.patch('/update-me', authController.protect, userController.updateMe);
+router.delete('/delete-me', authController.protect, userController.deleteMe);
 
-userRouter
+router
   .route('/')
   .get(userController.getAllUsers)
   .post(userController.createUser);
 
-userRouter
+router
   .route('/:id')
   .get(userController.getUser)
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
 
-module.exports = userRouter;
+module.exports = router;
