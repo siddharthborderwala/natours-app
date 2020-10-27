@@ -4,6 +4,7 @@ const filterObject = (object, ...props) => {
   props.forEach(prop => {
     filteredObj[prop] = object[prop];
   });
+  return filteredObj;
 };
 
 module.exports = filterObject;
