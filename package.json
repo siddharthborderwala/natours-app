@@ -1,6 +1,6 @@
 {
   "name": "natours",
-  "private": "true",
+  "private": true,
   "version": "1.0.0",
   "description": "Server for natours",
   "main": "server.js",
