@@ -8,6 +8,7 @@ const hpp = require('hpp');
 //routers
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
+const reviewRouter = require('./routes/reviewRoutes');
 
 //handlers
 const AppError = require('./utils/AppError.class');
@@ -73,6 +74,7 @@ app.use((req, _, next) => {
 //MOUNTING ROUTERS AS MIDDLEWARE
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/reviews', reviewRouter);
 
 app.all('*', (req, _, next) => {
   next(new AppError(`Cannot find ${req.originalUrl} 😶`));
