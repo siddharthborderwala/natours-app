@@ -3,27 +3,30 @@
 //
 
 //THIRD PARTY MODULES
-const express = require('express');
+const router = require('express').Router();
 
 //PERSONAL MODULES
 const authController = require('../controllers/authController');
 const tourController = require('../controllers/tourController');
+const reviewRouter = require('./reviewRoutes');
 
-const tourRouter = express.Router();
+// nested routing
+router.use('/:tourId/reviews', reviewRouter);
 
-tourRouter
+router
   .route('/top-5-cheap')
   .get(tourController.aliasTop5Cheap, tourController.getAllTours);
 
-tourRouter.route('/tour-stats').get(tourController.getTourStats);
-tourRouter.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
+router.route('/tour-stats').get(tourController.getTourStats);
+router.route('/monthly-plan/:year').get(tourController.getMonthlyPlan);
 
-tourRouter
+router
   .route('/')
-  .get(authController.protect, tourController.getAllTours)
+  .all(authController.protect)
+  .get(tourController.getAllTours)
   .post(tourController.createTour);
 
-tourRouter
+router
   .route('/:id')
   .get(tourController.getTour)
   .patch(tourController.updateTour)
@@ -33,4 +36,4 @@ tourRouter
     tourController.deleteTour
   );
 
-module.exports = tourRouter;
+module.exports = router;

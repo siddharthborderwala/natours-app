@@ -3,7 +3,7 @@
 //
 
 //THIRD PARTY MODULES
-const router = require('express').Router();
+const router = require('express').Router({ mergeParams: true });
 
 const reviewController = require('../controllers/reviewController');
 const authController = require('../controllers/authController');
