@@ -7,7 +7,8 @@
   "scripts": {
     "start": "nodemon server.js NODE_ENV=development",
     "prod": "nodemon server.js NODE_ENV=production",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "import-data": "node dev-data/data/script.js"
   },
   "author": "Siddharth Borderwala",
   "license": "MIT",
