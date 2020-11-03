@@ -8,7 +8,7 @@ exports.getOne = (Model, populateOptions) =>
     if (populateOptions) query = query.populate(populateOptions);
     const doc = await query;
 
-    const modelName = Model.modelName.toLowercase();
+    const modelName = Model.modelName.toLowerCase();
 
     if (!doc) {
       return next(new AppError(`No ${modelName} found with that ID`, 404));
@@ -28,7 +28,7 @@ exports.createOne = Model =>
     const doc = await Model.create(req.body);
 
     const data = {};
-    data[Model.modelName.toLowercase()] = doc;
+    data[Model.modelName.toLowerCase()] = doc;
 
     res.status(201).json({
       status: 'success',
@@ -42,7 +42,7 @@ exports.updateOne = Model =>
       new: true,
       runValidators: true,
     });
-    const modelName = Model.modelName.toLowercase();
+    const modelName = Model.modelName.toLowerCase();
 
     if (!doc) {
       return next(new AppError(`No ${modelName} found with that ID`, 404));
@@ -63,10 +63,7 @@ exports.deleteOne = Model =>
 
     if (!doc) {
       return next(
-        new AppError(
-          `No ${Model.modelName.toLowercase()} found with that ID`,
-          404
-        )
+        new AppError(`No ${Model.modelName} found with that ID`, 404)
       );
     }
 
@@ -77,7 +74,7 @@ exports.deleteOne = Model =>
   });
 
 exports.getAll = Model =>
-  catchAsync(async (req, res) => {
+  catchAsync(async (req, res, next) => {
     // to allow for nested GET reviews on tour (workaround)
     let filter = {};
     if (req.params.tourId) filter = { tour: req.params.tourID };
@@ -87,13 +84,20 @@ exports.getAll = Model =>
       .sort()
       .limitFields()
       .paginate();
+
     const doc = await features.query;
+    const modelName = Model.modelName.toLowerCase().concat('s');
+
+    if (!doc) {
+      return next(new AppError(`No ${modelName} found with that ID`, 404));
+    }
+
+    const data = {};
+    data[modelName] = doc;
 
     res.status(200).json({
       status: 'success',
       results: doc.length,
-      data: {
-        doc,
-      },
+      data,
     });
   });
