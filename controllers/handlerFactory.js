@@ -24,7 +24,7 @@ exports.getOne = (Model, populateOptions) =>
   });
 
 exports.createOne = Model =>
-  catchAsync(async (req, res) => {
+  catchAsync(async (req, res, next) => {
     const doc = await Model.create(req.body);
 
     const data = {};
@@ -85,6 +85,7 @@ exports.getAll = Model =>
       .limitFields()
       .paginate();
 
+    // const doc = await features.query.explain();  # to explain the query
     const doc = await features.query;
     const modelName = Model.modelName.toLowerCase().concat('s');
 
