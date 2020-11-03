@@ -48,10 +48,10 @@ const importData = async resource => {
       });
     else if (resource === 'reviews') await Review.create(reviewsData);
     else if (resource === 'all') {
-      await Tour.create(toursData);
       await User.create(usersData, {
         validateBeforeSave: false,
       });
+      await Tour.create(toursData);
       await Review.create(reviewsData);
     } else throw new Error('Invalid resource');
     return 'Success importing data into DB';
