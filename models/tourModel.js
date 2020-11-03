@@ -31,9 +31,10 @@ const tourSchema = new mongoose.Schema(
     },
     ratingsAverage: {
       type: Number,
-      default: 1,
-      min: [1, 'Rating must be above 1.0'],
+      default: 0,
+      min: [0, 'Rating must be above 0.0'],
       max: [5, 'Rating must be below 5.0'],
+      set: val => Math.round(val * 10) / 10,
     },
     ratingsQuantity: {
       type: Number,
@@ -115,6 +116,10 @@ const tourSchema = new mongoose.Schema(
 
 // we don't use arrow functions in mongoose for the 'this' keyword
 
+tourSchema.index({ price: 1, ratingsAverage: -1 });
+tourSchema.index({ slug: 1 });
+tourSchema.index({ startsLocation: '2dsphere' });
+
 //virtual property
 //cannot be used for querying data
 //can be used to put business logic into models
@@ -165,12 +170,14 @@ tourSchema.post(/^find/, function (docs, next) {
 });
 
 //AGGREGATION MIDDLEWARE
+/*
 tourSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({
     secretTour: { $ne: true },
   });
   next();
 });
+*/
 
 const Tour = mongoose.model('Tour', tourSchema);
 
