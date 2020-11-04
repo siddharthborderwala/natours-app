@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -6,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require('xss-clean');
 const hpp = require('hpp');
 //routers
+const viewRouter = require('./routes/viewRoutes');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
@@ -16,6 +18,12 @@ const globalErrorHandler = require('./controllers/errorController');
 
 //APP - INSTANCE OF EXPRESS
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, './views'));
+
+// serve static files
+app.use(express.static(path.join(__dirname, './public')));
 
 //MIDDLEWARE STACk
 
@@ -62,9 +70,6 @@ app.use(
   })
 );
 
-// serve static files
-app.use(express.static(`${__dirname}/public`));
-
 // test middleware
 app.use((req, _, next) => {
   req.reqTime = new Date().toISOString();
@@ -72,6 +77,7 @@ app.use((req, _, next) => {
 });
 
 //MOUNTING ROUTERS AS MIDDLEWARE
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
