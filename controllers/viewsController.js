@@ -13,13 +13,22 @@ exports.getOverview = catchAsync(async (req, res, next) => {
 });
 
 exports.getTour = catchAsync(async (req, res) => {
-  console.log(req.params.slug);
   // 1) get data of the requested tour
-  const tour = await Tour.findOne({ slug: req.params.slug });
+  const tour = await Tour.findOne({ slug: req.params.slug }).populate({
+    path: 'reviews',
+    fields: 'review rating user',
+  });
+
+  if (!tour) {
+    res.status(404).render('error', {
+      title: '404 Not Found',
+    });
+    return;
+  }
 
   // 3) render template with data from 1
   res.status(200).render('tour', {
-    title: tour.name,
+    title: `${tour.name} Tour`,
     tour: tour,
   });
 });
