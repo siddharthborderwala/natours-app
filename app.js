@@ -28,7 +28,30 @@ app.use(express.static(path.join(__dirname, './public')));
 //MIDDLEWARE STACk
 
 // security headers
-app.use(helmet());
+helmet.contentSecurityPolicy();
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: "'self'",
+        baseUri: "'self'",
+        connectSrc: [
+          'https://*.tiles.mapbox.com',
+          'https://api.mapbox.com',
+          'https://events.mapbox.com',
+        ],
+        workerSrc: ['blob:', "'self'"],
+        childSrc: ['blob:', "'self'"],
+        imgSrc: ['data:', 'blob:', "'self'"],
+        scriptSrc: ["'self'", 'https://*.mapbox.com'],
+        styleSrc: ['https:', "'self'", "'unsafe-inline'"],
+        objectSrc: ["'none'"],
+        fontSrc: ["'self'", 'https:', 'data:'],
+        frameAncestors: ["'self'"],
+      },
+    },
+  })
+);
 
 // dev logging
 if (process.env.NODE_ENV === 'development') {
