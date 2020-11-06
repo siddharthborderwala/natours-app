@@ -1,7 +1,10 @@
 {
   "cSpell.words": [
     "latlng",
+    "mapbox",
+    "mapboxgl",
     "natours"
   ],
-  "python.pythonPath": "C:\\Python39\\python.exe"
+  "python.pythonPath": "C:\\Python39\\python.exe",
+  "compile-hero.disable-compile-files-on-did-save-code": true
 }
