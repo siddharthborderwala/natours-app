@@ -599,6 +599,10 @@ body {
   );
 }
 
+.section-reviews > div::-webkit-scrollbar {
+  display: none;
+}
+
 .reviews {
   padding: 5rem 0;
   display: grid;
