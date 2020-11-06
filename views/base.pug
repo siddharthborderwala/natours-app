@@ -3,13 +3,15 @@ doctype html
 html(lang="en", dir="ltr", theme-data="light")
 
   head
-    meta(charset="UTF-8")
-    meta(name="viewport", content="width=device-width, initial-scale=1.0, shrink-to-fit=no")
-    link(rel="stylesheet", href="/css/style.css")
-    link(rel="shortcut icon", href="/img/favicon.png", type="image/png")
-    link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Lato:300,300i,700")
+    block head
+      meta(charset="UTF-8")
+      meta(name="viewport", content="width=device-width, initial-scale=1.0, shrink-to-fit=no") 
 
-    title Natours | #{title}
+      link(rel="stylesheet", href="/css/style.css")
+      link(rel="shortcut icon", href="/img/favicon.png", type="image/png")
+      link(rel="stylesheet", href="https://fonts.googleapis.com/css?family=Lato:300,300i,700")
+
+      title Natours | #{title}
 
   body
     include _header
@@ -17,3 +19,5 @@ html(lang="en", dir="ltr", theme-data="light")
     block content
 
     include _footer
+
+    block body_end_script
