@@ -1,5 +1,6 @@
 const path = require('path');
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -36,6 +37,8 @@ app.use(
         defaultSrc: "'self'",
         baseUri: "'self'",
         connectSrc: [
+          "'self'",
+          'http://127.0.0.1:*',
           'https://*.tiles.mapbox.com',
           'https://api.mapbox.com',
           'https://events.mapbox.com',
@@ -67,11 +70,9 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 // reading data from body into req.body
-app.use(
-  express.json({
-    limit: '10kb',
-  })
-);
+app.use(express.json({ limit: '10kb' }));
+// read data from cookie
+app.use(cookieParser());
 
 // data sanitization against NoSQL query injection
 app.use(mongoSanitize());
