@@ -14,7 +14,7 @@
       "runtimeExecutable": "nodemon",
       "skipFiles": ["<node_internals>/**"],
       "type": "pwa-node",
-      "args": ["-e", "js,mjs,json,pug", "NODE_ENV=development"]
+      "args": ["NODE_ENV=development", "-e", "js,mjs,json,pug"]
     }
   ]
 }
