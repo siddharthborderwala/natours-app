@@ -24,30 +24,51 @@ const handleJWTError = () =>
 const handleJWTExpireError = () =>
   new AppError('Your session has expired, please login again', 401);
 
-const sendErrorDevMode = (err, res) => {
-  res.status(err.statusCode).json({
-    status: err.status,
+const sendErrorDevMode = (err, req, res) => {
+  if (req.originalUrl.startsWith('/api')) {
+    return res.status(err.statusCode).json({
+      status: err.status,
+      message: err.message,
+      stack: err.stack,
+      error: err,
+    });
+  }
+
+  console.error('ERROR:', err);
+  return res.status(err.statusCode).render('error', {
+    title: 'Something went wrong',
     message: err.message,
-    stack: err.stack,
-    error: err,
   });
 };
 
-const sendErrorProdMode = (err, res) => {
-  if (err.isOperational) {
-    res.status(err.statusCode).json({
-      status: err.status,
-      message: err.message,
-    });
-  } else {
-    //Log the error
-    console.error('ERROR:', err);
+const sendErrorProdMode = (err, req, res) => {
+  if (req.originalUrl.startsWith('/api')) {
+    if (err.isOperational) {
+      return res.status(err.statusCode).json({
+        status: err.status,
+        message: err.message,
+      });
+    }
 
-    res.status(500).json({
+    console.error('ERROR:', err);
+    return res.status(500).json({
       status: 'error',
-      message: 'Something went very wrong!',
+      message: 'We are trying to fix the issue, thank you for your patience',
     });
   }
+
+  if (err.isOperational) {
+    return res.status(err.statusCode).render('error', {
+      title: 'Something went wrong',
+      message: err.message,
+    });
+  }
+
+  console.error('ERROR:', err);
+  return res.status(500).render('error', {
+    title: '500 - Error',
+    message: 'We are trying to fix the issue, thank you for your patience',
+  });
 };
 
 module.exports = (err, req, res, next) => {
@@ -55,9 +76,11 @@ module.exports = (err, req, res, next) => {
   err.status = err.status || 'error';
 
   if (process.env.NODE_ENV === 'development') {
-    sendErrorDevMode(err, res);
+    sendErrorDevMode(err, req, res);
   } else if (process.env.NODE_ENV === 'production') {
     let error = { ...err };
+    error.message = err.message;
+
     if (error.name === 'CastError') error = handleCastErrorDB(error);
     if (error.code === 11000) error = handleDuplicateFieldsDB(error);
     if (error._message === 'Validation failed')
@@ -65,6 +88,6 @@ module.exports = (err, req, res, next) => {
     if (error.name === 'JsonWebTokenError') error = handleJWTError();
     if (error.name === 'TokenExpiredError') error = handleJWTExpireError();
 
-    sendErrorProdMode(error, res);
+    sendErrorProdMode(error, req, res);
   }
 };
