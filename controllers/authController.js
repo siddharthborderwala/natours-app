@@ -69,6 +69,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     req.headers.authorization.startsWith('Bearer')
   ) {
     token = req.headers.authorization.split(' ')[1];
+  } else if (req.cookies.jwt) {
+    token = req.cookies.jwt;
   }
 
   if (!token) return next(new AppError('Please login to get access', 401));
@@ -87,6 +89,27 @@ exports.protect = catchAsync(async (req, res, next) => {
   req.user = freshUser;
   next();
 });
+
+exports.isLoggedIn = async (req, res, next) => {
+  if (req.cookies.jwt) {
+    try {
+      const token = req.cookies.jwt;
+      const decoded = await promisify(jwt.verify)(
+        token,
+        process.env.JWT_SECRET
+      );
+
+      const freshUser = await User.findById(decoded.id);
+      if (!freshUser) return next();
+      if (freshUser.changedPasswordAfter(decoded.iat)) return next();
+
+      res.locals.user = freshUser;
+    } catch (err) {
+      return next();
+    }
+  }
+  return next();
+};
 
 exports.restrictTo = (...roles) => (req, res, next) => {
   if (!roles.includes(req.user.role)) {
@@ -184,3 +207,14 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 4) Log the user in, i.e. send fresh JWT
   createAndSendToken(user, 200, res);
 });
+
+exports.logout = (req, res) => {
+  console.log('whatttt');
+  res.cookie('jwt', 'logged-out', {
+    expiresIn: new Date(Date.now() + 10 ** 4),
+    httpOnly: true,
+  });
+  res.status(200).json({
+    status: 'success',
+  });
+};
