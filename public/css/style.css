@@ -90,8 +90,9 @@ body {
   position: fixed;
   top: 0;
   left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
+  transition: all 0.4s;
+  -webkit-transform: translate3d(-50%, 0, 3rem) scale(1) rotateY(0deg);
+  transform: translate3d(-50%, 0, 3rem) scale(1) rotateY(0deg);
   z-index: 9999;
   color: #fff;
   font-size: 1.8rem;
@@ -1325,4 +1326,10 @@ body {
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
+}
+.collapse {
+  -webkit-transform: translate3d(-50%, -100%, -3rem) scale(0.5, 0.5)
+    rotateY(30deg);
+  transform: translate3d(-50%, -100%, -3rem) scale(0.5, 0.5) rotateY(30deg);
+  opacity: 0.5;
 }
