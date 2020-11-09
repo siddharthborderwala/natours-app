@@ -9,6 +9,7 @@ process.on('uncaughtException', error => {
     'UNCAUGHT EXCEPTION:',
     error.name,
     error.message,
+    error.stack,
     '\nGracefully shutting down...'
   );
   process.exit(1);
