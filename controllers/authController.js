@@ -87,7 +87,8 @@ exports.protect = catchAsync(async (req, res, next) => {
     );
 
   req.user = freshUser;
-  next();
+  res.locals.user = freshUser;
+  return next();
 });
 
 exports.isLoggedIn = async (req, res, next) => {
@@ -209,7 +210,6 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
 });
 
 exports.logout = (req, res) => {
-  console.log('whatttt');
   res.cookie('jwt', 'logged-out', {
     expiresIn: new Date(Date.now() + 10 ** 4),
     httpOnly: true,
