@@ -58,6 +58,7 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!isAuthorized) {
     return next(new AppError('Incorrect email or password', 401));
   }
+  console.log(user);
   //send token to client
   createAndSendToken(user, 200, res);
 });
