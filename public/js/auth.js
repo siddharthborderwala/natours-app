@@ -5,7 +5,7 @@ import { showAlert } from './alert';
 export const login = async (email, password) => {
   try {
     const res = await axios({
-      url: `${process.env.URL}api/v1/users/login`,
+      url: `/api/v1/users/login`,
       method: 'POST',
       data: {
         email,
@@ -26,7 +26,7 @@ export const logout = async () => {
   try {
     const res = await axios({
       method: 'GET',
-      url: `${process.env.URL}/api/v1/users/logout`,
+      url: `/api/v1/users/logout`,
     });
 
     if (res.data.status === 'success') location.reload(true);

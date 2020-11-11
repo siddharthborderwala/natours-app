@@ -8,7 +8,7 @@ const reloadAfterUpdate = () => {
 export const updateMyData = async data => {
   try {
     const res = await axios({
-      url: `${process.env.URL}api/v1/users/me`,
+      url: `/api/v1/users/me`,
       method: 'PATCH',
       data,
     });
@@ -29,7 +29,7 @@ export const updateMyPassword = async (
 ) => {
   try {
     const res = await axios({
-      url: `${process.env.URL}api/v1/users/update-my-password`,
+      url: `/api/v1/users/update-my-password`,
       method: 'POST',
       data: {
         passwordCurrent,
