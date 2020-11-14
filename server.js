@@ -17,8 +17,6 @@ process.on('uncaughtException', error => {
 
 dotenv.config({ path: './config.env' });
 
-process.env.NODE_ENV = process.argv[2].slice(9);
-
 console.log('Process environment NODE_ENV:', process.env.NODE_ENV);
 
 const app = require('./app');
