@@ -12,7 +12,12 @@ router.get('/signup', notImplementedRoute);
 
 router.route('/me').all(authController.protect).get(viewsController.getAccount);
 // TODO: implement reset password
+// send req from login form, receive email, open this rote
 // access resetToken from url params on frontEnd
 router.get('/forgot-password', notImplementedRoute);
+
+// TODO: implement reset password
+// access resetToken from url params on frontEnd
+router.get('/checkout/success', notImplementedRoute);
 
 module.exports = router;
