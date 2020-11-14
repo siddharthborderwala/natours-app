@@ -5,13 +5,14 @@
   "description": "Server for natours",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js NODE_ENV=development",
+    "start": "node server.js NODE_ENV=production",
     "dev": "nodemon -e js,json,pug server.js NODE_ENV=development",
     "prod": "nodemon server.js NODE_ENV=production",
     "debug": "ndb server.js NODE_ENV=development",
     "import-data": "node dev-data/data/script.js",
     "watch:js": "parcel watch ./public/js/index.js -d ./public",
-    "build:js": "parcel build ./public/js/index.js -d ./public"
+    "build:js": "parcel build ./public/js/index.js -d ./public",
+    "refresh-db": "yarn import-data --delete all && yarn import-data --import all"
   },
   "author": "Siddharth Borderwala",
   "license": "MIT",
@@ -35,6 +36,7 @@
     "pug": "^3.0.0",
     "sharp": "^0.26.2",
     "slugify": "^1.4.0",
+    "stripe": "^8.121.0",
     "validator": "^13.1.1",
     "xss-clean": "^0.1.1"
   },
