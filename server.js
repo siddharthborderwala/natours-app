@@ -15,7 +15,8 @@ process.on('uncaughtException', error => {
   process.exit(1);
 });
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: './.env' });
+process.env.NODE_ENV = process.argv[2].split('=')[1];
 
 console.log('Process environment NODE_ENV:', process.env.NODE_ENV);
 
