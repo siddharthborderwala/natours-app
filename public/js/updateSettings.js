@@ -30,7 +30,7 @@ export const updateMyPassword = async (
   try {
     const res = await axios({
       url: `/api/v1/users/update-my-password`,
-      method: 'POST',
+      method: 'PATCH',
       data: {
         passwordCurrent,
         password,

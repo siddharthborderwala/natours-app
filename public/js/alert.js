@@ -18,8 +18,8 @@ export const showAlert = (type, msg, timeout = 4000) => {
     element.classList.add('collapse');
   }, timeout - 100);
 
-  // //remove it after some time
-  // setTimeout(() => {
-  //   element.remove();
-  // }, timeout);
+  //remove it after some time
+  setTimeout(() => {
+    element.remove();
+  }, timeout);
 };
