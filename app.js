@@ -8,6 +8,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require('xss-clean');
 const hpp = require('hpp');
 const compression = require('compression');
+const cors = require('cors');
 //routers
 const viewRouter = require('./routes/viewRoutes');
 const tourRouter = require('./routes/tourRoutes');
@@ -27,6 +28,11 @@ app.enable('trust proxy');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, './views'));
 
+// implement cors
+app.use(cors());
+// handle options request
+app.options('*', cors());
+
 // serve static files
 app.use(express.static(path.join(__dirname, './public')));
 
@@ -40,14 +46,7 @@ app.use(
       directives: {
         defaultSrc: "'self'",
         baseUri: "'self'",
-        connectSrc: [
-          "'self'",
-          'http://127.0.0.1:*',
-          'https://*.tiles.mapbox.com',
-          'https://api.mapbox.com',
-          'https://events.mapbox.com',
-          'https://js.stripe.com/v3/',
-        ],
+        connectSrc: ["'self'", 'https:'],
         workerSrc: ['blob:', "'self'"],
         childSrc: ['blob:', "'self'"],
         imgSrc: ['data:', 'blob:', "'self'", 'https:'],
