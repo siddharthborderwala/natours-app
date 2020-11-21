@@ -41,6 +41,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create(req.body);
   const url = `${process.env.URL}/me`;
   await new Email(newUser, url).sendWelcome();
+  // TODO: verify email
 
   createAndSendToken(newUser, 201, res);
 });
@@ -60,7 +61,6 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!isAuthorized) {
     return next(new AppError('Incorrect email or password', 401));
   }
-  console.log(user);
   //send token to client
   createAndSendToken(user, 200, res);
 });
@@ -142,7 +142,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     const resetURL = `${process.env.URL}/forgot-password?resetToken=${resetToken}`;
     await new Email(user, resetURL).sendPasswordReset();
   } catch (error) {
-    console.log(error);
     user.passwordResetToken = undefined;
     user.passwordResetExpire = undefined;
     await user.save({ validateBeforeSave: false });
