@@ -14,17 +14,16 @@ const signToken = id => {
   });
 };
 
-const createAndSendToken = (user, statusCode, res) => {
+const createAndSendToken = (user, statusCode, req, res) => {
   const token = signToken(user._id);
-  const cookieOptions = {
+
+  res.cookie('jwt', token, {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
     httpOnly: true,
-  };
-
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
-  res.cookie('jwt', token, cookieOptions);
+    secure: req.secure || req.headers('x-forwarded-proto') === 'https',
+  });
 
   user.password = undefined;
 
@@ -43,7 +42,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   await new Email(newUser, url).sendWelcome();
   // TODO: verify email
 
-  createAndSendToken(newUser, 201, res);
+  createAndSendToken(newUser, 201, req, res);
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -62,7 +61,7 @@ exports.login = catchAsync(async (req, res, next) => {
     return next(new AppError('Incorrect email or password', 401));
   }
   //send token to client
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, req, res);
 });
 
 exports.protect = catchAsync(async (req, res, next) => {
@@ -180,7 +179,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.save();
 
   // 4) Log the user in and send jwt
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, req, res);
 });
 
 exports.updatePassword = catchAsync(async (req, res, next) => {
@@ -199,7 +198,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // We don't use update method for the mongoose hooks to work
 
   // 4) Log the user in, i.e. send fresh JWT
-  createAndSendToken(user, 200, res);
+  createAndSendToken(user, 200, req, res);
 });
 
 exports.logout = (req, res) => {

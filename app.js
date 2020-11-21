@@ -57,6 +57,7 @@ app.use(
         styleSrc: ['https:', "'self'", "'unsafe-inline'"],
         objectSrc: ["'self'", 'https:'],
         fontSrc: ["'self'", 'https:', 'data:'],
+        frameSrc: ["'self'", 'https://js.stripe.com/'],
         frameAncestors: ["'self'"],
       },
     },
