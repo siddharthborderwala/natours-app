@@ -17,7 +17,7 @@ router.get('/my-tours', authController.protect, viewsController.getMyTours);
 // access resetToken from url params on frontEnd
 router.get('/forgot-password', notImplementedRoute);
 
-// TODO: implement reset password
+// TODO: implement checkout success page
 // access resetToken from url params on frontEnd
 router.get('/checkout/success', notImplementedRoute);
 
