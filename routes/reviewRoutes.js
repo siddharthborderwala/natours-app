@@ -9,7 +9,7 @@ const reviewController = require('../controllers/reviewController');
 const authController = require('../controllers/authController');
 
 router.use(authController.protect);
-
+// TODO: only users that have bought the tour can review it
 router
   .route('/')
   .get(reviewController.getAllReviews)

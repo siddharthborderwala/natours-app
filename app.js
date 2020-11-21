@@ -44,6 +44,7 @@ app.use(
           'https://*.tiles.mapbox.com',
           'https://api.mapbox.com',
           'https://events.mapbox.com',
+          'https://js.stripe.com/v3/',
         ],
         workerSrc: ['blob:', "'self'"],
         childSrc: ['blob:', "'self'"],
