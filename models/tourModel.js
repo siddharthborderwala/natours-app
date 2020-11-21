@@ -163,12 +163,13 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
+/*
 tourSchema.post(/^find/, function (docs, next) {
   //this regex selects all the methods that start with fin
   console.log(`Find query took ${Date.now() - this.start} ms!`);
   next();
 });
-
+*/
 //AGGREGATION MIDDLEWARE
 /*
 tourSchema.pre('aggregate', function (next) {
