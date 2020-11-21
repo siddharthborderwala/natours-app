@@ -7,6 +7,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xssClean = require('xss-clean');
 const hpp = require('hpp');
+const compression = require('compression');
 //routers
 const viewRouter = require('./routes/viewRoutes');
 const tourRouter = require('./routes/tourRoutes');
@@ -95,6 +96,8 @@ app.use(
     ],
   })
 );
+
+app.use(compression());
 
 // test middleware
 app.use((req, _, next) => {
