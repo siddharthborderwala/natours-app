@@ -49,7 +49,11 @@ app.use(
         workerSrc: ['blob:', "'self'"],
         childSrc: ['blob:', "'self'"],
         imgSrc: ['data:', 'blob:', "'self'", 'https:'],
-        scriptSrc: ["'self'", 'https://*.mapbox.com'],
+        scriptSrc: [
+          "'self'",
+          'https://*.mapbox.com',
+          'https://js.stripe.com/v3/',
+        ],
         styleSrc: ['https:', "'self'", "'unsafe-inline'"],
         objectSrc: ["'self'", 'https:'],
         fontSrc: ["'self'", 'https:', 'data:'],
