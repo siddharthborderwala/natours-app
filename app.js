@@ -15,6 +15,7 @@ const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
 const bookingRouter = require('./routes/bookingRoutes');
+const bookingController = require('./controllers/bookingController');
 
 //handlers
 const AppError = require('./utils/AppError.class');
@@ -78,6 +79,15 @@ const limiter = rateLimit({
 });
 // rate limiting
 app.use('/api', limiter);
+
+//incoming data is a stream and should be parsed in raw format
+app.post(
+  '/webhook-checkout',
+  express.raw({
+    type: 'application/json',
+  }),
+  bookingController.webhookCheckout
+);
 
 // reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
