@@ -1,4 +1,5 @@
 const Tour = require('../models/tourModel');
+const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync.wrapper');
 const AppError = require('../utils/AppError.class');
 // const User = require('../models/userModel');
@@ -22,7 +23,6 @@ exports.getTour = catchAsync(async (req, res, next) => {
   });
 
   if (!tour) {
-    console.log('half-width');
     return next(new AppError('No tour found with this name', 404));
   }
 
@@ -64,3 +64,15 @@ exports.updateUserData = catchAsync(async (req, res, next) => {
   });
 });
 */
+
+exports.getMyTours = catchAsync(async (req, res, next) => {
+  const bookings = await Booking.find({ user: req.user.id });
+
+  const toursIds = bookings.map(el => el.tour);
+  const tours = await Tour.find({ _id: { $in: toursIds } });
+
+  res.status(200).render('overview', {
+    title: 'My Tours',
+    tours,
+  });
+});
