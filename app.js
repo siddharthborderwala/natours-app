@@ -22,6 +22,8 @@ const globalErrorHandler = require('./controllers/errorController');
 //APP - INSTANCE OF EXPRESS
 const app = express();
 
+app.enable('trust proxy');
+
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, './views'));
 
