@@ -11,6 +11,7 @@ router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 router.get('/signup', notImplementedRoute);
 
 router.route('/me').all(authController.protect).get(viewsController.getAccount);
+router.get('/my-tours', authController.protect, viewsController.getMyTours);
 // TODO: implement reset password
 // send req from login form, receive email, open this rote
 // access resetToken from url params on frontEnd
