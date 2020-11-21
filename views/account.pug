@@ -14,7 +14,7 @@ block content
 
         ul.side-nav
           +navItem('#', 'Settings', 'settings', true)
-          +navItem('#', 'My bookings', 'briefcase', false)
+          +navItem('my-tours', 'My bookings', 'briefcase', false)
           +navItem('#', 'My reviews', 'star', false)
           +navItem('#', 'Billing', 'credit-card', false)
 
@@ -45,7 +45,7 @@ block content
 
             .form__group.form__photo-upload
               img.form__user-photo(src=`/img/users/${user.photo}` alt='User photo')
-              input#photo.form__upload(type="file", name="photo", accept="image/*")
+              input#photo.form__upload(type="file" name="photo" accept="image/*")
               label(for="photo") Choose new photo
 
             .form__group.right
