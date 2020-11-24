@@ -4,3 +4,4 @@ config.env
 .eslintcache
 .idea/
 .cache/
+.vscode/
