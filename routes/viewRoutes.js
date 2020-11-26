@@ -8,7 +8,7 @@ router.get('/', authController.isLoggedIn, viewsController.getOverview);
 router.get('/tour/:slug', authController.isLoggedIn, viewsController.getTour);
 router.get('/login', authController.isLoggedIn, viewsController.getLoginForm);
 // TODO: implement signup
-router.get('/signup', notImplementedRoute);
+router.get('/signup', viewsController.getSignupForm);
 
 router.route('/me').all(authController.protect).get(viewsController.getAccount);
 router.get('/my-tours', authController.protect, viewsController.getMyTours);
