@@ -48,6 +48,7 @@ process.on('unhandledRejection', error => {
     'UNHANDLED REJECTION 💥:',
     error.name,
     error.message,
+    error.stack,
     '\nGracefully shutting down...'
   );
   server.close(() => {
