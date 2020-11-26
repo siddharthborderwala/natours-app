@@ -62,7 +62,7 @@ exports.deleteBooking = factory.deleteOne(Booking);
 const createBookingCheckout = async session => {
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
-  const price = session.line_items[0].price * 0.01;
+  const price = session.amount_total * 0.01;
   await Booking.create({ tour, user, price });
 };
 
