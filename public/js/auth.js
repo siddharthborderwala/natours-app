@@ -51,3 +51,36 @@ export const signup = async data => {
     showAlert('error', err.response.data.message);
   }
 };
+
+export const forgotPassword = async data => {
+  try {
+    const res = await axios({
+      method: 'POST',
+      url: '/api/v1/users/forgot-password',
+      data,
+    });
+
+    if (res.data.status === 'success') {
+      showAlert('success', 'Reset token sent to your email');
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
+
+export const resetPassword = async (data, token) => {
+  try {
+    const res = await axios({
+      method: 'PATCH',
+      url: `/api/v1/users/reset-password/${token}`,
+      data,
+    });
+
+    if (res.data.status === 'success') {
+      showAlert('success', 'Password reset successfully');
+      window.setTimeout(location.assign.bind(location, '/'), 1000);
+    }
+  } catch (err) {
+    showAlert('error', err.response.data.message);
+  }
+};
