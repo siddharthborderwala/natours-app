@@ -1,0 +1,14 @@
+extends base
+
+block content
+  main.main
+    if success
+      h2.ma-bt-md.heading-secondary Congratulations! Your tour is booked successfully
+      br
+      a.link-btn(href=`/tour/${slug}#section-description`) 
+        h3 View details here
+    else
+      h2.ma-bt-md.heading-secondary.heading-secondary--error Tour booking failed, please try again!
+      br
+      a.ma-bt-md.link-btn(href=`/tour/${slug}#section-cta`)
+        h3 Try again here
