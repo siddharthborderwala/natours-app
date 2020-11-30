@@ -34,7 +34,7 @@ block content
             use(href='/img/icons.svg#icon-map-pin')
           span.heading-box__text #{tour.startLocation.description}
 
-  section.section-description
+  section.section-description#section-description
     .overview-box
       div
         .overview-box__group
@@ -63,7 +63,7 @@ block content
       each line in desc
         p.description__text #{line}
 
-  section.section-pictures
+  section.section-pictures#section-pictures
     each img, i in tour.images
       .picture-box
         img.picture-box__img(src=`/img/tours/${img}`, alt=`The Park Camper Tour ${i + 1}`, class=`picture-box__img--${i+1}`)
@@ -71,12 +71,12 @@ block content
   section.section-map
     #map(data-locations=`${JSON.stringify(tour.locations)}`)
 
-  section.section-reviews
+  section.section-reviews#section-reviews
     .reviews
       each review in tour.reviews
         +reviewCard(review)
 
-  section.section-cta
+  section.section-cta#section-cta
     .cta
       .cta__img.cta__img--logo
         img(src='/img/logo-white.png' alt='Natours logo')
