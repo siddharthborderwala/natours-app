@@ -138,7 +138,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
 
   // 3) Send it to user's email
   try {
-    const resetURL = `${process.env.URL}/forgot-password?resetToken=${resetToken}`;
+    const resetURL = `${process.env.URL}reset-password?resetToken=${resetToken}`;
     await new Email(user, resetURL).sendPasswordReset();
   } catch (error) {
     user.passwordResetToken = undefined;
@@ -176,7 +176,7 @@ exports.resetPassword = catchAsync(async (req, res, next) => {
   user.passwordConfirm = req.body.passwordConfirm;
   user.passwordResetToken = undefined;
   user.passwordResetExpire = undefined;
-  user.save();
+  await user.save();
 
   // 4) Log the user in and send jwt
   createAndSendToken(user, 200, req, res);
