@@ -1,6 +1,6 @@
 /* eslint-disable */
 import '@babel/polyfill';
-import { login, logout, signup } from './auth';
+import { login, logout, signup, forgotPassword, resetPassword } from './auth';
 import { updateMyData, updateMyPassword } from './updateSettings';
 import { displayMap } from './mapbox';
 import { bookTour } from './payment';
@@ -8,6 +8,8 @@ import { bookTour } from './payment';
 const map = document.getElementById('map');
 const loginForm = document.querySelector('form.form__login');
 const signupForm = document.querySelector('form.form__signup');
+const forgotPasswordForm = document.querySelector('form.form__forgot-password');
+const resetPasswordForm = document.querySelector('form.form__reset-password');
 const logoutButton = document.querySelector('.nav__el--logout');
 const updateMyDataForm = document.querySelector('form.form-user-data');
 const updateMyPasswordForm = document.querySelector('form.form-user-settings');
@@ -34,6 +36,23 @@ if (signupForm)
     const password = document.getElementById('password').value;
     const passwordConfirm = document.getElementById('passwordConfirm').value;
     signup({ name, email, password, passwordConfirm });
+  });
+
+if (forgotPasswordForm)
+  forgotPasswordForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    forgotPassword({ email });
+  });
+
+if (resetPasswordForm)
+  resetPasswordForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const password = document.getElementById('password').value;
+    const passwordConfirm = document.getElementById('passwordConfirm').value;
+    const token = window.location.search.slice(1).split('=')[1];
+    console.log('token', token);
+    resetPassword({ password, passwordConfirm }, token);
   });
 
 if (logoutButton) logoutButton.addEventListener('click', logout);
