@@ -82,3 +82,27 @@ exports.getMyTours = catchAsync(async (req, res, next) => {
     tours,
   });
 });
+
+exports.getCheckout = catchAsync(async (req, res, next) => {
+  const isSuccessful = req.query.success === 'true';
+  const slug = req.query.tourSlug;
+  const title = `Checkout ${isSuccessful ? 'successful' : 'failure'}`;
+
+  res.status(200).render('checkout', {
+    title,
+    success: isSuccessful,
+    slug,
+  });
+});
+
+exports.getForgotPassword = catchAsync(async (req, res, next) => {
+  res.status(200).render('forgotPassword', {
+    title: 'Forgot your password?',
+  });
+});
+
+exports.getResetPassword = catchAsync(async (req, res, next) => {
+  res.status(200).render('resetPassword', {
+    title: 'Reset your password here',
+  });
+});
